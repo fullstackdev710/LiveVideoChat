@@ -1,6 +1,10 @@
 <?php
 include 'core/init.php';
 
+if ($userObj->isLoggedIn()) {
+   $userObj->redirect("home.php");
+}
+
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
    if (isset($_POST)) {
       $email = trim(stripslashes(htmlentities($_POST['email'])));
