@@ -5,11 +5,15 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
    if (isset($_POST)) {
       $email = trim(stripslashes(htmlentities($_POST['email'])));
       $password = $_POST['password'];
+      var_dump($email);
 
       if (!empty($email) && !empty($password)) {
-         if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $error = "Invalid Email format";
          } else {
+            if ($user = $userObj->emailExist($email)) {
+               var_dump($user);
+            }
          }
       } else {
          $error = "Please enter your email and password to login";
