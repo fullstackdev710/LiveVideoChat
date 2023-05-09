@@ -22,4 +22,14 @@ class User
          return false;
       }
    }
+
+   public function hash($password)
+   {
+      return password_hash($password, PASSWORD_DEFAULT);
+   }
+
+   public function redirect($location)
+   {
+      header("Location: " . BASE_URL . $location);
+   }
 }
