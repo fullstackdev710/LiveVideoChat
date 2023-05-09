@@ -5,14 +5,19 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
    if (isset($_POST)) {
       $email = trim(stripslashes(htmlentities($_POST['email'])));
       $password = $_POST['password'];
-      var_dump($email);
 
       if (!empty($email) && !empty($password)) {
          if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $error = "Invalid Email format";
          } else {
             if ($user = $userObj->emailExist($email)) {
-               var_dump($user);
+               if (password_verify($password, $user->password)) {
+                  session_regenerate_id();
+                  $_SESSION['userID'] = $user->userID;
+                  $userObj->redirect('home.php');
+               } else {
+                  $error = "Incorrect email or password";
+               }
             }
          }
       } else {
