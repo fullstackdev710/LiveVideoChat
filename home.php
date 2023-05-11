@@ -67,6 +67,7 @@ $user = $userObj->userData();
                   <h2 class="font-bold text-lg my-4  px-6 select-none">Users</h2>
                   <ul class="select-none">
                      <!-- USER-LIST -->
+                     <?= $userObj->getUsers() ?>
                   </ul>
                </div>
             </div>
