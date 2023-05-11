@@ -1,6 +1,6 @@
 <?php
 include 'core/init.php';
-
+// echo $userObj->hash('password');
 if ($userObj->isLoggedIn()) {
    $userObj->redirect("home.php");
 }
