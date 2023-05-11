@@ -11,8 +11,6 @@ if (isset($_GET['username']) && !empty($_GET['username'])) {
 } else {
    $userObj->redirect('home.php');
 }
-
-var_dump($profileData);
 ?>
 
 <!DOCTYPE html>
@@ -85,8 +83,40 @@ var_dump($profileData);
          <!--LEFT_SIDE_END-->
          <!--RIGHT_SIDE-->
          <div class="flex-2 flex rounded-xl w-full h-full ">
-            <!-- PROFILE -->
-            <!-- VIDEO -->
+            <!--PROFILE_SECTION-->
+            <div id="profile" class="flex flex-1 justify-center items-center">
+               <div class="flex flex-col flex-1 h-full overflow-hidden overflow-y-auto items-center justify-center">
+                  <div class="w-60 h-60 right-img rounded-full overflow-hidden">
+                     <img class="h-auto w-full" src="<?php echo BASE_URL . $profileData->profileImage; ?>">
+                  </div>
+                  <div class="right-heading">
+                     <h2 class="text-center"><?= $profileData->username ?></h2>
+                     <p>Do you want to make a Call?</p>
+                     <button id="callBtn" data-user="<?= $profileData->userID ?>" class="active:-top-2 relative transition border border-gray-400 shadow-md my-4 bg-green-400 hover:bg-green-500 p-4 px-5 rounded-full text-white text-xl"><i class="fas fa-video"></i></button>
+                  </div>
+               </div>
+            </div>
+            <!--PROFILE_SECTION_END-->
+            <!--VIDEO_CALL-->
+            <div id="video" class="hidden overflow-hidden flex items-center">
+               <div class="flex relative flex-col h-full">
+                  <div class="order-2 h-full">
+                     <video id="remoteVideo" class="h-full object-cover" style="width:1280px;" autoplay playinline>
+                     </video>
+                     <video id="localVideo" class="vid-2 z-1 right-0 bottom-1 absolute" autoplay playinline>
+                     </video>
+                  </div>
+                  <div class="order-1 mt-4 absolute self-center">
+                     <div class="time rounded-xl text-white font-bold py-1 px-4"><span id="callTimer"></span></div>
+                  </div>
+                  <div class="order-3 shadow-md flex justify-center btn-call-end items-end w-full h-full absolute ">
+                     <button id="hangupBtn" class="relative -top-8 shadow-lg drop-shadow bg-red-600  rounded-full hover:bg-red-700 text-white text-2xl px-4 py-4 text-2xl">
+                        <i class="fas fa-video-slash"></i>
+                     </button>
+                  </div>
+               </div>
+            </div>
+            <!--VIDEO_CALL_ENDS-->
          </div>
          <!--RIGHT_SIDE_END-->
       </div><!--INNER_ENDS-->
