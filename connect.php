@@ -1,11 +1,15 @@
 <?php
 include 'core/init.php';
 
-$user = $userObj->userData();
+$userObj->updateSession();
+
 if (isset($_GET['username']) && !empty($_GET['username'])) {
    $profileData = $userObj->getUserByUsername(($_GET['username']));
+   $user = $userObj->userData();
 
    if (!$profileData) {
+      $userObj->redirect('home.php');
+   } else if ($profileData->username === $user->username) {
       $userObj->redirect('home.php');
    }
 } else {

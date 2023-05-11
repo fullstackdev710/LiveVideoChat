@@ -1,13 +1,14 @@
 <?php
 class User
 {
-   public $db, $userID;
+   public $db, $userID, $sessionID;
 
    public function __construct()
    {
       $db = new DB;
       $this->db = $db->connect();
       $this->userID = $this->ID();
+      $this->sessionID = $this->getSessionID();
    }
 
    public function ID()
@@ -15,6 +16,11 @@ class User
       if ($this->isLoggedIn()) {
          return $_SESSION['userID'];
       }
+   }
+
+   public function getSessionID()
+   {
+      return session_id();
    }
 
    public function emailExist($email)
@@ -91,6 +97,22 @@ class User
    {
       $stmt = $this->db->prepare("SELECT * FROM `users` WHERE `username` = :username");
       $stmt->bindParam(":username", $username, PDO::PARAM_STR);
+      $stmt->execute();
+      return $stmt->fetch(PDO::FETCH_OBJ);
+   }
+
+   public function updateSession()
+   {
+      $stmt = $this->db->prepare("UPDATE `users` SET `sessionID`=:sessionID WHERE `userID`=:userID");
+      $stmt->bindParam(":sessionID", $this->sessionID, PDO::PARAM_STR);
+      $stmt->bindParam(":userID", $this->userID, PDO::PARAM_INT);
+      $stmt->execute();
+   }
+
+   public function getUserBySession($sessionID)
+   {
+      $stmt = $this->db->prepare("SELECT * FROM `users` WHERE `sessionID` = :sessionID");
+      $stmt->bindParam(":sessionID", $sessionID, PDO::PARAM_STR);
       $stmt->execute();
       return $stmt->fetch(PDO::FETCH_OBJ);
    }
