@@ -37,6 +37,10 @@ if (isset($_GET['username']) && !empty($_GET['username'])) {
    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
    <!-- Jquery timer -->
    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/timer.jquery/0.7.0/timer.jquery.js"></script>
+   <script type="text/javascript">
+      // const conn = new WebSocket('wss://dev.peace-marketing.com/vchat/?token=<?php echo $userObj->sessionID; ?>');
+      const conn = new WebSocket('ws://localhost:8080/vchat/?token=<?php echo $userObj->sessionID; ?>');
+   </script>
 
 </head>
 

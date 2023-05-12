@@ -1,4 +1,9 @@
 <?php
+
+namespace MyApp;
+
+use PDO;
+
 class User
 {
    public $db, $userID, $sessionID;
