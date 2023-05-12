@@ -12,7 +12,7 @@ $user = $userObj->userData();
 <html>
 
 <head>
-   <title>Live Video Chat PHP</title>
+   <title>AAALive Video Chat PHP</title>
    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
    <!-- Tailwind -->
    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
