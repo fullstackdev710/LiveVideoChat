@@ -121,4 +121,12 @@ class User
       $stmt->execute();
       return $stmt->fetch(PDO::FETCH_OBJ);
    }
+
+   public function updateConnection($connectionID, $userID)
+   {
+      $stmt = $this->db->prepare("UPDATE `users` SET `connectionID`=:connectionID WHERE `userID`=:userID");
+      $stmt->bindParam(":connectionID", $connectionID, PDO::PARAM_STR);
+      $stmt->bindParam(":userID", $userID, PDO::PARAM_INT);
+      $stmt->execute();
+   }
 }
