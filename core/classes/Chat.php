@@ -41,11 +41,21 @@ class Chat implements MessageComponentInterface
          $numRecv,
          $numRecv == 1 ? '' : 's'
       );
+      $data = json_decode($msg, true);
+      $sendTo = $this->userObj->userData($data['sendTo']);
+      $send['sendTo'] = $sendTo->userID;
+      $send['by'] = $from->$data->userID;
+      $send['profileImage'] = $from->$data->profileImage;
+      $send['username'] = $from->$data->username;
+      $send['type'] = $data['type'];
+      $send['data'] = $data['data'];
 
       foreach ($this->clients as $client) {
          if ($from !== $client) {
             // The sender is not the receiver, send to each client connected
-            $client->send($msg);
+            if ($client->resourceId == $sendTo->connectionID || $from == $client) {
+               $client->send($msg);
+            }
          }
       }
    }

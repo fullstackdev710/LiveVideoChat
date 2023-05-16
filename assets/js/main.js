@@ -68,7 +68,32 @@ conn.onopen = (e) => {
   console.log("connected to websocket");
 };
 
-conn.onmessage = (e) => {};
+conn.onmessage = async (e) => {
+  let message = JSON.parse(e.data);
+  let by = message.by;
+  let data = message.data;
+  let type = message.type;
+  let profileImage = message.profileImage;
+  let username = message.username;
+
+  switch (type) {
+    case "is-client-ready":
+      if (!pc) {
+        await getConn();
+      }
+      if (pc.iceConnectionState === "connected") {
+        send("client-already-oncall");
+      } else {
+        //display
+        alert("user is calling");
+      }
+      break;
+    case "client-already-oncall":
+      // display popup right here
+      setTimeout("window.location.reload(true)", 2000);
+      break;
+  }
+};
 
 function send(type, data, sendTo) {
   conn.send(
