@@ -54,6 +54,21 @@ async function createOffer(sendTo) {
   send("client-offer", pc.localDescription, sendTo);
 }
 
+async function createAnswer(sendTo, data) {
+  if (!pc) {
+    await getConn();
+  }
+  if (!localStream) {
+    await getCam();
+  }
+
+  await sendIceCandidate(sendTo);
+  await pc.setRemoteDescription(data);
+  await pc.createAnswer();
+  await pc.setLocalDescription(pc.localDescription);
+  send("client-answer", pc.localDescription, sendTo);
+}
+
 function sendIceCandidate(sendTo) {
   pc.onicecandidate = (e) => {
     if (e.candidate !== null) {
@@ -93,11 +108,28 @@ conn.onmessage = async (e) => {
         //display popup
         displayCall();
 
+        answerBtn.on("click", () => {
+          callBox.addClass("hidden");
+          $("wrapper").removeClass("glass");
+          send("client-is-ready", null, sendTo);
+        });
+
         declineBtn.on("click", () => {
           send("client-rejected", null, sendTo);
           location.reload(true);
         });
       }
+      break;
+    case "client-answer":
+      if (pc.localDescription) {
+        await pc.setRemoteDescription(data);
+      }
+      break;
+    case "client-offer":
+      createAnswer(sendTo);
+
+    case "client-is-ready":
+      createOffer(sendTo, data);
       break;
     case "client-already-oncall":
       // display popup right here
