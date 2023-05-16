@@ -16,6 +16,11 @@ const mediaConst = {
   video: true,
 };
 
+// what to receive from other client
+const options = {
+  offerToReceiveVideo: 1,
+};
+
 function getConn() {
   if (!pc) {
     pc = new RTCPeerConnection();
@@ -39,8 +44,24 @@ async function getCam() {
   }
 }
 
+async function createOffer(sendTo) {
+  await sendIceCandidate(sendTo);
+  await pc.createOffer();
+  await pc.setLocalDescription(pc.localDescription);
+  send("client-offer", pc.localDescription, sendTo);
+}
+
+function sendIceCandidate(sendTo) {
+  pc.onicecandidate = (e) => {
+    if (e.candidate !== null) {
+      // send ice candidate to other client
+      send("client-candidate", e.candidate, sendTo);
+    }
+  };
+}
 $("#callBtn").on("click", () => {
   getCam();
+  send("is-client-ready", null, sendTo);
 });
 
 conn.onopen = (e) => {
