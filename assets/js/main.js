@@ -2,6 +2,9 @@
 
 //buttons
 let callBtn = $("#callBtn");
+let callBox = $("#callBox");
+let answerBtn = $("#answerBtn");
+let declineBtn = $("#declineBtn");
 
 let pc;
 let sendTo = callBtn.data("user");
@@ -76,6 +79,9 @@ conn.onmessage = async (e) => {
   let profileImage = message.profileImage;
   let username = message.username;
 
+  $("#username").text(username);
+  $("#username").attr("src", profileImage);
+
   switch (type) {
     case "is-client-ready":
       if (!pc) {
@@ -84,13 +90,21 @@ conn.onmessage = async (e) => {
       if (pc.iceConnectionState === "connected") {
         send("client-already-oncall");
       } else {
-        //display
-        alert("user is calling");
+        //display popup
+        displayCall();
+
+        declineBtn.on("click", () => {
+          send("client-rejected", null, sendTo);
+          location.reload(true);
+        });
       }
       break;
     case "client-already-oncall":
       // display popup right here
       setTimeout("window.location.reload(true)", 2000);
+      break;
+    case "client-rejected":
+      alert("client rejected call");
       break;
   }
 };
@@ -105,4 +119,8 @@ function send(type, data, sendTo) {
   );
 }
 
+function displayCall() {
+  callBox.removeClass("hidden");
+  $(".wrapper").addClass("glass");
+}
 // send("is-client-is-ready", null, sendTo);
