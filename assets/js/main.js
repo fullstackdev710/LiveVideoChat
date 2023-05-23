@@ -75,6 +75,12 @@ function sendIceCandidate(sendTo) {
       // send ice candidate to other client
       send("client-candidate", e.candidate, sendTo);
     }
+
+    pc.ontrack = (e) => {
+      $("#video").removeClass("hidden");
+      $("#profile").addClass("hidden");
+      remoteVideo.srcObject = e.streams[0];
+    };
   };
 }
 $("#callBtn").on("click", () => {
@@ -98,6 +104,11 @@ conn.onmessage = async (e) => {
   $("#username").attr("src", profileImage);
 
   switch (type) {
+    case "client-candidate":
+      if (pc.localDescription) {
+        await pc.addIceCandidate(new RTCIceCandidate(data));
+      }
+      break;
     case "is-client-ready":
       if (!pc) {
         await getConn();
